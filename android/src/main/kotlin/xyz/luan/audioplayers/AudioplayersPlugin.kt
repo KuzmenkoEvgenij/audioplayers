@@ -98,7 +98,8 @@ class AudioplayersPlugin : MethodCallHandler, FlutterPlugin {
                 player.setUrl(url, isLocal)
             }
             "setPlaybackRate" -> {
-                val rate = call.argument<Double>("playbackRate") ?: throw error("playbackRate is required")
+                val rate = call.argument<Double>("playbackRate")
+                        ?: throw error("playbackRate is required")
                 player.setRate(rate)
             }
             "getDuration" -> {
@@ -110,12 +111,14 @@ class AudioplayersPlugin : MethodCallHandler, FlutterPlugin {
                 return
             }
             "setReleaseMode" -> {
-                val releaseModeName = call.argument<String>("releaseMode") ?: throw error("releaseMode is required")
+                val releaseModeName = call.argument<String>("releaseMode")
+                        ?: throw error("releaseMode is required")
                 val releaseMode = ReleaseMode.valueOf(releaseModeName.substring("ReleaseMode.".length))
                 player.setReleaseMode(releaseMode)
             }
             "earpieceOrSpeakersToggle" -> {
-                val playingRoute = call.argument<String>("playingRoute") ?: throw error("playingRoute is required")
+                val playingRoute = call.argument<String>("playingRoute")
+                        ?: throw error("playingRoute is required")
                 player.setPlayingRoute(playingRoute)
             }
             else -> {
@@ -145,7 +148,8 @@ class AudioplayersPlugin : MethodCallHandler, FlutterPlugin {
     }
 
     fun handleDuration(player: Player) {
-        channel.invokeMethod("audio.onDuration", buildArguments(player.playerId, player.getDuration() ?: 0))
+        channel.invokeMethod("audio.onDuration", buildArguments(player.playerId, player.getDuration()
+                ?: 0))
     }
 
     fun handleCompletion(player: Player) {
@@ -226,7 +230,7 @@ class AudioplayersPlugin : MethodCallHandler, FlutterPlugin {
         private val LOGGER = Logger.getLogger(AudioplayersPlugin::class.qualifiedName!!)
 
         private fun buildArguments(playerId: String, value: Any): Map<String, Any> {
-            return mapOf(
+            return mutableMapOf(
                     "playerId" to playerId,
                     "value" to value,
             )
